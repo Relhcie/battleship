@@ -1,36 +1,50 @@
-<!DOCTYPE html>
-
-<html lang="pt-br" dir="ltr">
-    <head>
-        <meta charset="utf-8">
-        <title>Battleship/placar</title>
-        <link rel="icon" href="assets/bomb.ico">
-        <script type="text/javascript" src="assets/jquery-3.4.1.min.js"></script>
-        <script type="text/javascript" src="assets/battleship.js"></script>
-    </head>
-    <body>
-        <header>
-             <figure>
+<a class= 'botao-voltar' href= '/home'> VOLTAR </a>
+ <header>
+            <figure>
                 <img class="logotipo" src="assets/logotipo.png" alt="Logotipo"></img>
             </figure>
-        </header>
-       
-       <main>
-            <h1>Placar</h1>
-          
-            <button class="return">VOLTAR</button>
-            
-            <div class="main"></div>
-       </main>
-           
-        
-    </body>
+            <h1>PLACAR:</h1>
+</header>
+
+
+<table id='tableplc'>
+
+<thead>	
+	<tr class='tds'>
+		<th>NOME</th>																		
+		<th>PONTOS</th>  
+	</tr>
+
+</thead>
+
+<tbody>
+
+	<% @users.each do |user| %>
+    	
+    	<% @array << {"nm" => user.nome.capitalize, "pt" => user.scores.count * 100} %>
+    	
+    	<% @array = @array.sort_by{ |hsh| hsh["pt"] }.reverse %>
+	
+    <% end %>
     
-</html>
+    <% @array.each do |usr| %>
+        <tr class='tds'>
+        	<td>
+        		<%= usr.fetch("nm") %>
+        	</td>										
+        	<td>
+        		<%= usr.fetch("pt") %>
+        	</td>
+    	</tr>
+    <% end %>
+    
+    
+	
+</tbody>
 
-<script>
-//battleship.init( document.querySelector('#board1') );
-//battleship.init1( document.querySelector('#board2') );
-//battleship.start();
+</table>
 
-</script>
+
+
+
+

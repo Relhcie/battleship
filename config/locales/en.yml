@@ -38,12 +38,14 @@ en:
             nome:
               blank: "^Campo nome não pode estar em branco."
             email:
-              blank: "^Campo mail não pode estar em branco."
+              blank: "^Campo email não pode estar em branco."
               invalid: " invalido."
-              too_short: " curto (minimo 5 caracteres)"
+              too_short: " curto (minimo de 5 caracteres)"
+              too_long: " longo (maximo de 16 caracteres)"
             password:
               blank: "^ Campo senha não pode estar em branco"
-              too_short: "^ Senha curta (minimo 5 caracteres)"
+              too_short: "^ Senha curta (minimo de 5 caracteres)"
+              too_long: "^ Senha longa (maximo de 16 caracteres)"
               confirmation: "^ Senha não corresponde"
             password_confirmation:
               confirmation: "^ Senha não corresponde"

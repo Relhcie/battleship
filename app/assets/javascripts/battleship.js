@@ -1,4 +1,8 @@
 //BATTLESHIP
+var or= '';
+var set_ship_count = 0;
+// precisei de uma variavel global
+            //pra passar o valor de orientação dos navios
 const battleship = {
 
     // ATRIBUTOS
@@ -75,6 +79,8 @@ const battleship = {
            'assets/A0.jpg','assets/A0.jpg','assets/A0.jpg','assets/A0.jpg','assets/A0.jpg','assets/A0.jpg','assets/A0.jpg','assets/A0.jpg','assets/A0.jpg','assets/A0.jpg',
            'assets/A0.jpg','assets/A0.jpg','assets/A0.jpg','assets/A0.jpg','assets/A0.jpg','assets/A0.jpg','assets/A0.jpg','assets/A0.jpg','assets/A0.jpg','assets/A0.jpg',
            'assets/A0.jpg','assets/A0.jpg','assets/A0.jpg','assets/A0.jpg','assets/A0.jpg','assets/A0.jpg','assets/A0.jpg','assets/A0.jpg','assets/A0.jpg','assets/A0.jpg'],
+    check1: false,
+    check2: false,
 
     // FUNÇÕES
     init: function(container) {
@@ -89,7 +95,9 @@ const battleship = {
         //this.board.fill('');
         this.draw();
         this.gameover = false;
-        alert("Clique no segundo tabuleiro para posicionar seus navios"); 
+        //send_to_modal('Clique no segundo tabuleiro para posicionar seus navios');
+        this.jogadas();
+        // alert("Clique no segundo tabuleiro para posicionar seus navios"); 
         this.hover_div();
     },
 
@@ -104,7 +112,6 @@ const battleship = {
     game_is_over: function() {
         this.gameover = true;
         console.log('GAME OVER');
-        alert('GAME OVER')
     },    
 
     draw: function() {
@@ -133,56 +140,49 @@ const battleship = {
     },
 
     jogadas: function(position) {
-        if (this.nivel == 'f' || this.nivel == 'F' || this.nivel == 'm' || 
-            this.nivel == 'M' || this.nivel == 'i' ||this.nivel == 'I' ){
-                if (!this.gameover){
-                    if (this.ctrl_posiciona){
-                        if (!this.vez){
-                            // jogada user
-                            if (this.board[position] == ''){
-                                //this.play_spl();
-                                this.board[position] = 'O';
-                                this.aux1[position] = "assets/navios/A16.jpg";
-                                this.draw();
-                                this.vez = true;
-                                this.jogadas();
-                                //alert('ÁGUA!!');
-                            }else if(this.board[position] == ' ') {
-                                //this.play_exp();
-                                this.board[position] = 'X';
-                                this.aux1[position] = "assets/navios/A15.jpg";
-                                this.draw();
-                                this.vez = true;
-                                this.checka_vitoria();
-                                this.jogadas();
-                                //alert('BOOOM!');
-                            }else if(this.board[position] == 'X' || this.board[position] == 'O'){
-                                this.draw();
-                                alert('Casa já marcada!');
-                            }              
-                        }else{
-                            // jogada adversário
-                            if (this.nivel == 'f' || this.nivel == 'F' ){
-                                this.nivel_facil();  
-                            }else if (this.nivel == 'm' || this.nivel == 'M'){
-                                this.nivel_medio();
-                            }else if (this.nivel == 'i' || this.nivel == 'I'){
-                                this.nivel_impossivel();
-                            }                
-                        }
-                    }else if (!this.set_navio){
-                        this.posiciona_navio(position);
-                    }else if(!this.set_navio_adv){
-                        this.posiciona_navio_adv();
-                    }else if(this.set_navio && this.set_navio_adv){
-                        this.ctrl_posiciona = true;
-                    }
-                }else{
-                    alert("FIM!");
+        if (!this.gameover){
+            if (this.ctrl_posiciona){
+                if (!this.vez){
+                    // jogada user
+                    if (this.board[position] == ''){
+                        //this.play_spl();
+                        this.board[position] = 'O';
+                        this.aux1[position] = "assets/navios/A16.jpg";
+                        this.draw();
+                        this.vez = true;
+                        this.jogadas();
+                        //alert('ÁGUA!!');
+                    }else if(this.board[position] == ' ') {
+                        //this.play_exp();
+                        this.board[position] = 'X';
+                        this.aux1[position] = "assets/navios/A15.jpg";
+                        this.draw();
+                        this.vez = true;
+                        this.checka_vitoria();
+                        this.jogadas();
+                        //alert('BOOOM!');
+                    }else if(this.board[position] == 'X' || this.board[position] == 'O'){
+                        this.draw();
+                        send_to_modal('Casa já marcada!');
+                        // alert('Casa já marcada!');
+                    }              
+                }else if(this.vez){
+                    // jogada adversário
+                    if (this.nivel == 'f' || this.nivel == 'F' ){
+                        this.nivel_facil();  
+                    }else if (this.nivel == 'm' || this.nivel == 'M'){
+                        this.nivel_medio();
+                    }else if (this.nivel == 'i' || this.nivel == 'I'){
+                        this.nivel_impossivel();
+                    }                
                 }
-        }else{
-            alert('Dificuldade inválida, selecione uma opção válida!');
-            this.start();
+            }else if (!this.set_navio){
+                this.posiciona_navio(position);
+            }else if(!this.set_navio_adv){
+                this.posiciona_navio_adv();
+            }else if(this.set_navio && this.set_navio_adv){
+                this.ctrl_posiciona = true;
+            }
         }
     },
 
@@ -642,10 +642,17 @@ const battleship = {
     },
 
     posiciona_navio: function(position){
-        var orient = prompt("Digite a orientação desejada:\n'v' para vertical\n'h' para horizontal", "");
+                     
+        var orient = or;
+        alert_set_ship("Escolha a orientação, em seguida selecione a casa desejada no segundo tabuleiro:");
+             
+        //if(or == 'v' || or =='h'){
+                 
         if (this.board2[position] == ''){
+           
             if(this.cnt == 0){
                 if (orient == 'v' || orient == 'V'){
+         
                     if (position == 60 || position == 70 || position == 80 || position == 90 ||
                         position == 61 || position == 71 || position == 81 || position == 91 ||
                         position == 62 || position == 72 || position == 82 || position == 92 ||
@@ -656,14 +663,16 @@ const battleship = {
                         position == 67 || position == 77 || position == 87 || position == 97 ||
                         position == 68 || position == 78 || position == 88 || position == 98 ||
                         position == 69 || position == 79 || position == 89 || position == 99 ){
-                            alert("Sem espaço suficiente!\nEscolha outra casa!");
+                            send_to_modal("Sem espaço suficiente!\nEscolha outra casa!");
+                            // alert("Sem espaço suficiente!\nEscolha outra casa!");
                     }else{
                         if (this.board2[position] == 'N' ||
                             this.board2[position+10] == 'N'||
                             this.board2[position+20] == 'N'||
                             this.board2[position+30] == 'N'||
                             this.board2[position+40] == 'N'){ 
-                                alert('Navios não podem se sobrepor!');
+                                send_to_modal('Navios não podem se sobrepor!');
+                                // alert('Navios não podem se sobrepor!');
                         }else{
                             this.board2[position] = 'N';
                             this.board2[position+10] = 'N';
@@ -696,14 +705,16 @@ const battleship = {
                         position == 76 || position == 77 || position == 78 || position == 79 ||
                         position == 86 || position == 87 || position == 88 || position == 89 ||
                         position == 96 || position == 97 || position == 98 || position == 99 ){    
-                            alert("Sem espaço suficiente!\nEscolha outra casa!");
+                            send_to_modal("Sem espaço suficiente!\nEscolha outra casa!");
+                            // alert("Sem espaço suficiente!\nEscolha outra casa!");
                     }else{
                         if (this.board2[position] == 'N' ||
                             this.board2[position+1] == 'N'||
                             this.board2[position+2] == 'N'||
                             this.board2[position+3] == 'N'||
                             this.board2[position+4] == 'N'){
-                                alert('Navios não podem se sobrepor!');
+                            send_to_modal('Navios não podem se sobrepor!');
+                                // alert('Navios não podem se sobrepor!');
                         }else{ 
                             this.board2[position] = 'N';
                             this.board2[position+1] = 'N';
@@ -725,8 +736,6 @@ const battleship = {
                             this.cnt += 1;
                         }
                     }
-                }else{
-                    alert('Valor inválido!!!\nClique no primeiro tabuleiro para posicionar seus navios');
                 }
             }else if(this.cnt == 1){
                 //alert(this.board2);
@@ -741,13 +750,15 @@ const battleship = {
                         position == 77 || position == 87 || position == 97 ||
                         position == 78 || position == 88 || position == 98 ||
                         position == 79 || position == 89 || position == 99 ){
-                            alert("Sem espaço suficiente!\nEscolha outra casa!");
+                            send_to_modal("Sem espaço suficiente!\nEscolha outra casa!");
+                            // alert("Sem espaço suficiente!\nEscolha outra casa!");
                     }else{  
                         if (this.board2[position] == 'N'||
                             this.board2[position+10] == 'N'||
                             this.board2[position+20] == 'N'||
                             this.board2[position+30] == 'N'){
-                                alert('Navios não podem se sobrepor!');
+                                //alert('Navios não podem se sobrepor!');
+                                send_to_modal('Navios não podem se sobrepor!');
                         }else{ 
                             this.board2[position] = 'N';
                             this.board2[position+10] = 'N';
@@ -783,7 +794,8 @@ const battleship = {
                             this.board2[position+1] == 'N'||
                             this.board2[position+2] == 'N'||
                             this.board2[position+3] == 'N'){
-                                alert('Navios não podem se sobrepor!');
+                                //alert('Navios não podem se sobrepor!');
+                                send_to_modal('Navios não podem se sobrepor!');
                         }else{
                             this.board2[position] = 'N';
                             this.board2[position+1] = 'N';
@@ -802,8 +814,6 @@ const battleship = {
                             this.cnt += 1;
                         }
                     }
-                }else{
-                    alert('Valor inválido!!!\nClique no primeiro tabuleiro para posicionar seus navios');
                 }
             }else if(this.cnt == 2){
                 if (orient == 'v' || orient == 'V'){
@@ -817,12 +827,14 @@ const battleship = {
                         position == 87 || position == 97 ||
                         position == 88 || position == 98 ||
                         position == 89 || position == 99 ){
-                            alert("Sem espaço suficiente!\nEscolha outra casa!");
+                            //alert("Sem espaço suficiente!\nEscolha outra casa!");
+                            send_to_modal('Sem espaço suficiente! Escolha outra casa!');
                     }else{    
                         if(this.board2[position] == 'N'||
                             this.board2[position+10] == 'N'||
                             this.board2[position+20] == 'N'){
-                                alert('Navios não podem se sobrepor!');
+                                //alert('Navios não podem se sobrepor!');
+                                send_to_modal('Navios não podem se sobrepor!');
                         }else{
                             this.board2[position] = 'N';
                             this.board2[position+10] = 'N';
@@ -849,12 +861,14 @@ const battleship = {
                         position == 78 || position == 79 ||
                         position == 88 || position == 89 ||
                         position == 98 || position == 99 ){    
-                            alert("Sem espaço suficiente!\nEscolha outra casa!");
+                            //alert("Sem espaço suficiente!\nEscolha outra casa!");
+                            send_to_modal('Sem espaço suficiente! Escolha outra casa!');
                     }else{
                         if (this.board2[position] == 'N'||
                             this.board2[position+1] == 'N'||
                             this.board2[position+2] == 'N'){
-                                alert('Navios não podem se sobrepor!');
+                                //alert('Navios não podem se sobrepor!');
+                                send_to_modal('Navios não podem se sobrepor!');
                         }else{
                             this.board2[position] = 'N';
                             this.board2[position+1] = 'N';
@@ -870,8 +884,6 @@ const battleship = {
                             this.cnt += 1;
                         }
                     }
-                }else{
-                    alert('Valor inválido!!!\nClique no primeiro tabuleiro para posicionar seus navios');
                 }
             }else if(this.cnt == 3){
                 if (orient == 'v' || orient == 'V'){
@@ -885,11 +897,13 @@ const battleship = {
                         position == 97 ||
                         position == 98 ||
                         position == 99 ){
-                            alert("Sem espaço suficiente!\nEscolha outra casa!");
+                            //alert("Sem espaço suficiente!\nEscolha outra casa!");
+                            send_to_modal("Sem espaço suficiente!\nEscolha outra casa!");
                     }else{
                         if (this.board2[position] == 'N'||
                             this.board2[position+10] == 'N'){
-                                alert('Navios não podem se sobrepor!');
+                                //alert('Navios não podem se sobrepor!');
+                                send_to_modal('Navios não podem se sobrepor!');
                         }else{
                             this.board2[position] = 'N';
                             this.board2[position+10] = 'N';
@@ -913,11 +927,13 @@ const battleship = {
                         position == 79 ||
                         position == 89 ||
                         position == 99 ){    
-                            alert("Sem espaço suficiente!\nEscolha outra casa!");
+                            //alert("Sem espaço suficiente!\nEscolha outra casa!");
+                            send_to_modal("Sem espaço suficiente!\nEscolha outra casa!");
                     }else{
                         if (this.board2[position] == 'N'||
                         this.board2[position+1] == 'N'){
-                            alert('Navios não podem se sobrepor!');
+                            //alert('Navios não podem se sobrepor!');
+                            send_to_modal('Navios não podem se sobrepor!');
                         }else{
                             this.board2[position] = 'N';
                             this.board2[position+1] = 'N';
@@ -930,8 +946,6 @@ const battleship = {
                             this.cnt += 1;
                         }
                     }
-                }else{
-                    alert('Valor inválido!!!\nClique no primeiro tabuleiro para posicionar seus navios');
                 }
             }else if(this.cnt == 4){
                 if (orient == 'v' || orient == 'V'){
@@ -945,11 +959,13 @@ const battleship = {
                         position == 97 ||
                         position == 98 ||
                         position == 99 ){
-                            alert("Sem espaço suficiente!\nEscolha outra casa!");
+                            //alert("Sem espaço suficiente!\nEscolha outra casa!");
+                            send_to_modal("Sem espaço suficiente!\nEscolha outra casa!");
                     }else{     
                         if (this.board2[position] == 'N'||
                             this.board2[position+10] == 'N'){
-                            alert('Navios não podem se sobrepor!');
+                            //alert('Navios não podem se sobrepor!');
+                            send_to_modal('Navios não podem se sobrepor!')
                         }else{
                             this.board2[position] = 'N';
                             this.board2[position+10] = 'N';
@@ -973,11 +989,13 @@ const battleship = {
                         position == 79 ||
                         position == 89 ||
                         position == 99 ){    
-                            alert("Sem espaço suficiente!\nEscolha outra casa!");
+                            //alert("Sem espaço suficiente!\nEscolha outra casa!");
+                            send_to_modal("Sem espaço suficiente!\nEscolha outra casa!");
                     }else{
                         if (this.board2[position] == 'N'||
                         this.board2[position+1] == 'N'){
-                            alert('Navios não podem se sobrepor!');
+                            //alert('Navios não podem se sobrepor!');
+                            send_to_modal('Navios não podem se sobrepor!');
                         }else{
                             this.board2[position] = 'N';
                             this.board2[position+1] = 'N';
@@ -990,8 +1008,6 @@ const battleship = {
                             this.draw();
                         }
                     }
-                }else{
-                    alert('Valor inválido!!!\nClique no primeiro tabuleiro para posicionar seus navios');
                 }
             }
         }else{
@@ -1002,6 +1018,10 @@ const battleship = {
             this.set_navio = true;
             this.jogadas();
         }
+      
+             //}
+         
+        // var orient = prompt("Digite a orientação desejada:\n'v' para vertical\n'h' para horizontal", "");
     },
 
     posiciona_navio_adv: function(){
@@ -1036,7 +1056,7 @@ const battleship = {
                             this.board[pos+30] = ' ';
                             this.board[pos+40] = ' ';
                             this.draw();
-                            alert('Porta-aviões posicionado!');
+                            // alert('Porta-aviões posicionado!');
                             this.cnt1 += 1;
                             //alert(this.cnt1 + '-5v');
                         }
@@ -1069,7 +1089,7 @@ const battleship = {
                             this.board[pos+3] = ' ';
                             this.board[pos+4] = ' ';
                             this.draw();
-                            alert('Porta-aviões adversário posicionado!');
+                            // alert('Porta-aviões adversário posicionado!');
                             this.cnt1 += 1;
                             //alert(this.cnt1 + '-5h');
                         }
@@ -1102,7 +1122,7 @@ const battleship = {
                             this.board[pos+20] = ' ';
                             this.board[pos+30] = ' ';
                             this.draw();
-                            alert('Destroyer adversário posicionado!');
+                            // alert('Destroyer adversário posicionado!');
                             this.cnt1 += 1;
                             //alert(this.cnt1 + '-4v');
                         }
@@ -1133,7 +1153,7 @@ const battleship = {
                             this.board[pos+2] = ' ';
                             this.board[pos+3] = ' ';
                             this.draw();
-                            alert('Destroyer adversário posicionado!');
+                            // alert('Destroyer adversário posicionado!');
                             this.cnt1 += 1;
                             //alert(this.cnt1 + '-4h');
                         }
@@ -1164,7 +1184,7 @@ const battleship = {
                             this.board[pos+10] = ' ';
                             this.board[pos+20] = ' ';
                             this.draw();
-                            alert('Fragata adversária posicionada!');
+                            // alert('Fragata adversária posicionada!');
                             this.cnt1 += 1;
                             //alert(this.cnt1 + '-3v');
                         }
@@ -1193,7 +1213,7 @@ const battleship = {
                             this.board[pos+1] = ' ';
                             this.board[pos+2] = ' ';
                             this.draw();
-                            alert('Fragata adversária posicionada!');
+                            // alert('Fragata adversária posicionada!');
                             this.cnt1 += 1;
                             //alert(this.cnt1 + '-3h');
                         }
@@ -1222,7 +1242,7 @@ const battleship = {
                             this.board[pos] = ' ';
                             this.board[pos+10] = ' ';
                             this.draw();
-                            alert('Submarino adversário posicionado!');
+                            // alert('Submarino adversário posicionado!');
                             this.cnt1 += 1;
                             //alert(this.cnt1 + '-2av');
                         }
@@ -1249,7 +1269,7 @@ const battleship = {
                             this.board[pos] = ' ';
                             this.board[pos+1] = ' ';
                             this.draw();
-                            alert('Submarino adversário posicionado!');
+                            // alert('Submarino adversário posicionado!');
                             this.cnt1 += 1;
                             //alert(this.cnt1 + '-2ah');
                         }
@@ -1278,8 +1298,9 @@ const battleship = {
                             this.board[pos] = ' ';
                             this.board[pos+10] = ' ';
                             this.draw();
-                            alert('Submarino adversário posicionado!');
-                            alert('Faça sua jogada!');
+                            // alert('Submarino adversário posicionado!');
+                            //alert('Faça sua jogada!');
+                            send_to_modal('Faça sua jogada no tabuleiro da esquerda!');
                             this.cnt1 += 1;
                             //alert(this.cnt1 + '-2bv');
                         }
@@ -1306,8 +1327,8 @@ const battleship = {
                             this.board[pos] = ' ';
                             this.board[pos+1] = ' ';
                             this.draw();
-                            alert('Submarino adversário posicionado!');
-                            alert('Faça sua jogada!');
+                            // alert('Submarino adversário posicionado!');
+                            send_to_modal('Faça sua jogada no tabuleiro da esquerda!');
                             this.cnt1 += 1;
                             //alert(this.cnt1 + '-2bh');
                         }
@@ -1339,68 +1360,71 @@ const battleship = {
         };
         if(vit_board == 16){
             this.gameover = true;
-            alert('Você venceu!!!');
+            this.check1 = true;
+            //alert('Você venceu!!!');
+            //send_to_modal('Você venceu!!!');
+            funcmain();
+            modal_victory("VOCÊ VENCEU!!!\nDESEJA JOGAR NOVAMENTE?");
         }else if(vit_board2 == 16){
             this.gameover = true;
-            alert('Perdeu pra máquina...')
+            this.check2 = true;
+            modal_victory("VOCÊ PERDEU!!!\nDESEJA JOGAR NOVAMENTE?");
+            //alert('Perdeu pra máquina...')
+            //send_to_modal('Perdeu pra máquina...');
         }
     },
-};                      
+};      
+
+function funcmain(){
+        var point = 100;
+        var pontuacao = {"point":point};
+        sendReq(pontuacao);
+};
+
+function sendReq(obj){
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 201) {
+        var objResp = JSON.parse(this.responseText);
+    }
+    };
+    xhttp.open("POST", "/scores.json", true);
+    xhttp.setRequestHeader("Content-Type","application/json");
+    xhttp.send(JSON.stringify(obj));
+};
+
+
 //codigo do Ariel começa aqui!!!
 
+function send_to_modal(alerta){
+    $('.hint').html(alerta)
+    $('.modals-hint').slideDown(400)
+    $('.hint-ok').click(function(){
+        $('.modals-hint').slideUp(400)
+    })
+}
 
-// function play(){
-//     $('nav').delay(500).slideDown(500);
-    // $('#play').click(function(){
-    //     $('nav').fadeOut(400,function(){
-    //         $('main').slideDown(400,function(){
-    //               battleship.init( document.querySelector('#board1') ),
-    //               battleship.init1( document.querySelector('#board2') ),
-    //               battleship.start()
-    //         })
-    //     });
-        
-            // battleship.init( document.querySelector('#board1') ),
-            // battleship.init1( document.querySelector('#board2') ),
-            // battleship.start()
-    // });
-    
-    // seleao niveis
-    
-    
-//     $('#aLogin').click(function(){
-//         $('nav').slideUp(400,function(){
-//             $('#divLogin').slideDown(400)
-//         })
-//     })
-//     $('#aScore').click(function(){
-//         $('nav').slideUp(400,function(){
-//             $('#divScore').slideDown(400)
-//         })
-//     })
-//      $('#aRegister').click(function(){
-//         $('nav').slideUp(400,function(){
-//             $('#divRegister').slideDown(400)
-//         })
-//     })
-    
-//     $(".return").click(function() {
-//         $(this).parent("div").slideUp(400,function(){
-//             $("nav").slideDown(400)
-//         })
-//     })
-// }
-// código mira-->
-// $(main);
-// function main(){
-// $("main div").click(function(){
-//     var x = $(this).position();
-//   if(x.top>0){
-//     $("#aimH").animate( {top:"0px"});
-//     $("#aimV").animate( {left:"0px"});
-//     $("#aimH").animate( {top:x.top+50});
-//     $("#aimV").animate( {left:x.left+50});
-//     //alert("top="+x.top+"px "+"left ="+x.left+"px");
-//   }
-    
-// });}
+
+
+function alert_set_ship(alerta){
+
+    if(set_ship_count < 5){
+        $('.set-hint').html(alerta)
+        $('.modals-set-ship').delay(800).slideDown(400)
+            $('.orientacao').click(function(){
+                $('.modals-set-ship').slideUp(400)
+                or = $(this).attr('id');
+            })
+        set_ship_count +=1;
+    }
+}
+ 
+function modal_victory(alerta){
+    $('.modals-play-again').slideDown(400).css('display','flex')
+    $('.modals-play-again .vic').html(alerta)
+    $('.modals-play-again a').click(function() {
+        $('.modals-play-again').slideUp(400);
+        window.location.reload();
+       //alert("porra");
+    })
+}
